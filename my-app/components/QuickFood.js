@@ -7,7 +7,7 @@ const QuickFood = () => {
   return (
     <View style={{}}>
         <Text style={{fontSize:20,fontWeight:'500',marginLeft:10}}>Get it quickly</Text>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+      <ScrollView style={{marginLeft:11}} horizontal showsHorizontalScrollIndicator={false}>
         {
             quickFood.map((item,index)=>{
                 return(
