@@ -8,7 +8,7 @@ export default [
         adress:"Residency Road, Ashok Nagar",
         ratings:"1k",
         cost_for_two:500,
-        cuisines:"north Indian, South Indian",
+        cuisines:"North Indian, South Indian",
         menu:[
             {
                 id:"20",

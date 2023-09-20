@@ -3,12 +3,24 @@ import React from 'react'
 import { AntDesign } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 // import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const MenuItem = ({item}) => {
+  const navigation = useNavigation()
   return (
     <View style={{margin:10}}>
-      <Pressable>
+      <Pressable onPress={()=> navigation.navigate('Menu',{
+        id:item.id,
+        name:item.name,
+        address:item.adress,
+        image:item.image,
+        rating:item.rating,
+        time:item.time,
+        cost_for_two:item.cost_for_two,
+        cuisines:item.cuisines,
+        menu:item.menu
+      })}>
         <View style={{flex:1,flexDirection:'row'}}>
             <ImageBackground imageStyle={{borderRadius:8}} style={{height:150,aspectRatio:4/5,borderRadius:8}} source={{uri:item.image}}>
               <Pressable>
