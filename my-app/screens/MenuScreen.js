@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text, View, ScrollView } from 'react-native'
+import { Pressable, StyleSheet, Text, View, ScrollView, Image } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import React, { useEffect, useState } from 'react'
 import { useNavigation, useRoute } from '@react-navigation/native'
@@ -9,13 +9,19 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import FoodItems from '../components/FoodItems';
 import { MaterialIcons } from '@expo/vector-icons';
-import { Modal, ModalPortal } from 'react-native-modals';
+import Modal from 'react-native-modal';
+import { useSelector } from 'react-redux';
+import { FontAwesome } from '@expo/vector-icons';
 
 
 const MenuScreen = () => {
+    const cart = useSelector((state) => state.cart.cart)
+    const total = cart.map((item) => item.price * item.quantity).reduce((curr,prev) => curr + prev,0)
+    console.log(total)
+    console.log(cart)
     const route = useRoute()
     const navigation = useNavigation()
-    console.log(route.params)
+    // console.log(route.params)
     const [menu,setMenu] = useState([])
     const [visible,setVisible] = useState(false)
 
@@ -27,7 +33,6 @@ const MenuScreen = () => {
     },[])
     const toggleModal = () =>{
       setVisible(!visible)
-      console.warn('pressed')
     }
 
 
@@ -106,10 +111,52 @@ const MenuScreen = () => {
     </Pressable> 
 
     <Modal isVisible={visible} onBackdropPress={toggleModal}>
-      <View style={{height:190,width:250,backgroundColor:'black',position:'absolute',bottom:35,rightz:25,borderRadius:7}}>
-        <Text>hello</Text>
+      <View style={{height:190,width:250,backgroundColor:'black',position:'absolute',bottom:35,right:10,borderRadius:7}}>
+        
+        {
+          menu.map((item,i)=>{
+            return(
+              <View style={{padding:10,flexDirection:"row",justifyContent:"space-between",alignItems:"center"}} key={i}>
+                <Text style={{color:"#D0D0D0",fontWeight:600,fontSize:19}}>{item.name}</Text>
+                <Text style={{color:"#D0D0D0",fontWeight:600,fontSize:19}}>{item.items.length}</Text>
+              </View>
+            )
+          })
+        }
+        <View style={{ justifyContent: "center", alignItems: "center" }}>
+              <Image
+                style={{ width: 120, height: 70, resizeMode: "contain" }}
+                source={{
+                  uri: "https://res.cloudinary.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_284/Logo_f5xzza",
+                }}
+              />
+            </View>
+
       </View>
     </Modal>
+    
+    {
+      (total === 0) ? 
+      (
+        null
+      ) :
+      (
+        <Pressable style={{flexDirection:"row",backgroundColor:"#00A877",width:'90%',padding:13,marginLeft:"auto",marginRight:"auto",marginBottom:20,position:"absolute",left:20,bottom:10,borderRadius:8}}>
+          <View style={{flex:1}}>
+            <Text style={{color:"white",fontSize:15,fontWeight:500}}>{cart.length} | {<FontAwesome style={{marginTop:2}} name="rupee" size={16} color="white" />} {total}</Text>
+            <View style={{flexDirection:"row"}}>
+              
+              <Text style={{color:"white",fontSize:15,fontWeight:400,marginLeft:3}}>Extra charges may apply!</Text>
+            </View>
+          </View>
+          <Pressable onPress={()=>navigation.navigate("Cart",{
+            name: route.params.name
+          })} style={{alignItems:"center",justifyContent:"center"}}>
+            <Text style={{color:"white",fontSize:17,fontWeight:500}}>View Cart</Text>
+          </Pressable>
+        </Pressable>
+      )
+    }
     </>
   )
 }
